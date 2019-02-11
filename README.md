@@ -1,4 +1,4 @@
-# Flex12
+![alt text](https://github.com/ShyamLad/Flex12/blob/master/flex12prefs/Resources/FLEX12_git.png "Flex12")
 
 **Hello Friends**
 
