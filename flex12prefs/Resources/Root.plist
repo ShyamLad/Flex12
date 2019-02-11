@@ -3,6 +3,11 @@
   items = (
     {
       cell = PSGroupCell;
+      headerCellClass = HeaderCell;
+
+    },
+    {
+      cell = PSGroupCell;
       label = "Changes may require respring";
     },
     {
@@ -19,6 +24,7 @@
       key = "FLXEnabled";
       default = 1;
       defaults = "com.ladshyam.FLEX12";
+      PostNotification = "com.ladshyam.FLEX12/preferences.changed";
     },
     {
       cell = PSGroupCell;
@@ -30,6 +36,7 @@
       key = "FLXLocked";
       default = 0;
       defaults = "com.ladshyam.FLEX12";
+      PostNotification = "com.ladshyam.FLEX12/preferences.changed";
     },
     {
       cell = PSGroupCell;
@@ -48,10 +55,11 @@
      // isSegmented = 1;
      // segmentCount = 10;
      defaults = "com.ladshyam.FLEX12";
+     PostNotification = "com.ladshyam.FLEX12/preferences.changed";
    },
    {
         cell = PSGroupCell;
         height = 20;
-        footerText = "FLEX12 v1.0 2019\nBy: Shyam Lad";
+        footerText = "Flex12 v1.0\nBy: Shyam Lad\n2019";
       });
 }

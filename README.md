@@ -21,4 +21,7 @@ of course
 
 # License
 
-BSD FLEX (look in the Class directory) and also BSD for this one.
+BSD for FLEX (located in the classes directory) and also BSD for this one.
+
+
+Flex icon made by GD Creativ, ZA from The Noun Project

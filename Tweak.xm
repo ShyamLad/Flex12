@@ -11,36 +11,38 @@
 #define kSettingsPath [NSHomeDirectory() stringByAppendingPathComponent:@"/Library/Preferences/com.ladshyam.FLEX12.plist"]
 
 static BOOL hasBeenForceTapped = NO;
+static BOOL enabled = YES;
+static BOOL enabled_Locked = NO;
+static float FLXForce = 2;
 
-static NSDictionary *prefs = [NSDictionary dictionaryWithContentsOfFile:kSettingsPath];
+
+@interface NSUserDefaults (Tweak_Category)
+- (id)objectForKey:(NSString *)key inDomain:(NSString *)domain;
+- (void)setObject:(id)value forKey:(NSString *)key inDomain:(NSString *)domain;
+@end
+
+static NSString *nsDomainString = @"com.ladshyam.FLEX12";
+static NSString *nsNotificationString = @"com.ladshyam.FLEX12/preferences.changed";
+
+static void notificationCallback(CFNotificationCenterRef center, void *observer, CFStringRef name, const void *object, CFDictionaryRef userInfo) {
+	NSNumber *n1 = (NSNumber *)[[NSUserDefaults standardUserDefaults] objectForKey:@"FLXEnabled" inDomain:nsDomainString];
+	enabled = (n1)? [n1 boolValue]:YES;
+  NSNumber *n2 = (NSNumber *)[[NSUserDefaults standardUserDefaults] objectForKey:@"FLXLocked" inDomain:nsDomainString];
+  enabled_Locked = (n2)? [n2 boolValue]:YES;
+  NSNumber *n3 = (NSNumber *)[[NSUserDefaults standardUserDefaults] objectForKey:@"FLXForce" inDomain:nsDomainString];
+  FLXForce = (n3)? [n3 floatValue]:2;
+}
+
 
 static void respring(CFNotificationCenterRef center, void *observer, CFStringRef name, const void *object, CFDictionaryRef userInfo) {
   [[%c(FBSystemService) sharedInstance] exitAndRelaunch:YES];
 }
 
-static void addDarwinObserver(CFNotificationCallback callBack, CFStringRef name) {
-  CFNotificationCenterAddObserver(CFNotificationCenterGetDarwinNotifyCenter(), NULL, callBack, name,
-                                  NULL, 0);
-}
 
-static bool GetPrefBool(NSString *key)
-{
-  //Return NO for FLXLocked by default
-  BOOL defaultBool = [key isEqualToString:@"FLXLocked"] ? NO : YES;
-  NSLog(@"The bool value for %@ is %@", key, [[prefs valueForKey:key] boolValue]);
- return [prefs valueForKey:key]? [[prefs valueForKey:key] boolValue] : defaultBool;
-
-}
-
-static double GetScaleFor(NSString *key) {
-  // Return 2 by default
-  NSDictionary *prefs = [NSDictionary dictionaryWithContentsOfFile:kSettingsPath];
-  return [prefs valueForKey:key] ? [[prefs valueForKey:key] doubleValue] : 2;
-}
 
 %hook UIWindow
 - (BOOL)_shouldCreateContextAsSecure {
-  if (GetPrefBool(@"FLXLocked")) {
+  if (enabled_Locked) {
     return [self isKindOfClass:%c(FLEXWindow)] ? YES : %orig;
   }
   return %orig;
@@ -52,12 +54,12 @@ static double GetScaleFor(NSString *key) {
 
 - (void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event {
   // NSLog(@"FLEXing12: We are touching");
-  if (GetPrefBool(@"FLXEnabled")) {
+  if (enabled) {
     UITouch *currentTouch = [touches anyObject];
     CGFloat currentForce = currentTouch.force;
     // NSLog(@"forceForward: The Current Force is: %@", @(currentForce));
 
-    float toggleForce = GetScaleFor(@"FLXForce");
+    float toggleForce = FLXForce;
     if(currentForce < toggleForce) {
       hasBeenForceTapped = NO;
     }
@@ -78,5 +80,19 @@ static double GetScaleFor(NSString *key) {
 %ctor{
 
   NSLog(@"Loading Flex");
-  addDarwinObserver(&respring, CFSTR("respring"));
+  notificationCallback(NULL, NULL, NULL, NULL, NULL);
+
+  CFNotificationCenterAddObserver(CFNotificationCenterGetDarwinNotifyCenter(),
+    NULL,
+    &respring,
+    CFSTR("respring"),
+    NULL, 0);
+
+	// Register for 'PostNotification' notifications
+	CFNotificationCenterAddObserver(CFNotificationCenterGetDarwinNotifyCenter(),
+		NULL,
+		notificationCallback,
+		(CFStringRef)nsNotificationString,
+		NULL,
+		CFNotificationSuspensionBehaviorCoalesce);
 }
