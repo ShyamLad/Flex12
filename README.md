@@ -2,17 +2,21 @@
 
 **Hello Friends**
 
-## Wut is dis?
+## What is this?
 
-This is an implementation of FLEX for iOS 12 RootlessJB. The tweak [[FLEXing]] by NSExceptional (https://github.com/NSExceptional/FLEXing) is awesome, but unfortunately Activator has not been updated for iOS 12 RootlessJB yet. This is a very simple implementation that allows you to toggle FLEX from the home screen or lockscreen by force-touching the status bar.
+THIS IS A TOOL FOR TWEAK DEVELOPERS!! This is an implementation of FLEX for iOS 12 RootlessJB. The tweak [[FLEXing]] by NSExceptional (https://github.com/NSExceptional/FLEXing) is awesome, but unfortunately Activator has not been updated for iOS 12 RootlessJB. This is a very simple implementation that allows you to toggle FLEX from the home screen or lockscreen by force-touching the status bar. You can also use this while the phone is locked (toggle this option in the settings).
 
-## How dis werk?
+## How does this work?
 
-Force-Touch the status bar. Does not work in apps yet bc of sandboxing limitations.
+Force-Touch the status bar. Does not work in apps yet because of sandboxing limitations of RootlessJB.
+
+## How do I install this?
+
+Compile with theos, inject debs how you normally would for RootlessJB. This will also work with a package manager once one gets updated.
 
 ## Can I contribute?
 
-yeh do yourself a fork
+yep, just do yourself a fork :)
 
 ## Are there settings with a nice little icon?
 
@@ -24,4 +28,4 @@ of course
 BSD for FLEX (located in the classes directory) and also BSD for this one.
 
 
-Flex icon made by GD Creativ, ZA from The Noun Project
+Flex icon partially made by GD Creativ, ZA from The Noun Project
