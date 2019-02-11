@@ -4,7 +4,7 @@
 
 ## What is this?
 
-THIS IS A TOOL FOR TWEAK DEVELOPERS!! This is an implementation of FLEX for iOS 12 RootlessJB. The tweak [[FLEXing]] by NSExceptional (https://github.com/NSExceptional/FLEXing) is awesome, but unfortunately Activator has not been updated for iOS 12 RootlessJB. This is a very simple implementation that allows you to toggle FLEX from the home screen or lockscreen by force-touching the status bar. You can also use this while the phone is locked (toggle this option in the settings).
+THIS IS A TOOL FOR TWEAK DEVELOPERS!! This is an implementation of FLEX for iOS 12 RootlessJB. The tweak [[FLEXing]] by NSExceptional (https://github.com/NSExceptional/FLEXing) is awesome, ~~but unfortunately Activator has not been updated for iOS 12 RootlessJB~~ **I have come to learn there is a branch of FLEXing that does use activator**. This is a very simple implementation that allows you to toggle FLEX from the home screen or lockscreen by force-touching the status bar. You can also use this while the phone is locked (toggle this option in the settings).
 
 ## How does this work?
 
