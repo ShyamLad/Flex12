@@ -40,6 +40,18 @@
     },
     {
       cell = PSGroupCell;
+      label = "LongPress on the status bar for 2 seconds";
+    },
+    {
+      cell = PSSwitchCell;
+      label = "Enable LongPress";
+      key = "FLXLongPress";
+      default = 1;
+      defaults = "com.ladshyam.FLEX12";
+      PostNotification = "com.ladshyam.FLEX12/preferences.changed";
+    },
+    {
+      cell = PSGroupCell;
     },
     {
       cell = PSGroupCell;

@@ -13,6 +13,7 @@
 static BOOL hasBeenForceTapped = NO;
 static BOOL enabled = YES;
 static BOOL enabled_Locked = NO;
+static BOOL enabled_LongPress = YES;
 static float FLXForce = 2;
 
 
@@ -31,6 +32,8 @@ static void notificationCallback(CFNotificationCenterRef center, void *observer,
   enabled_Locked = (n2)? [n2 boolValue]:YES;
   NSNumber *n3 = (NSNumber *)[[NSUserDefaults standardUserDefaults] objectForKey:@"FLXForce" inDomain:nsDomainString];
   FLXForce = (n3)? [n3 floatValue]:2;
+  NSNumber *n4 = (NSNumber *)[[NSUserDefaults standardUserDefaults] objectForKey:@"FLXLongPress" inDomain:nsDomainString];
+	enabled_LongPress = (n4)? [n4 boolValue]:YES;
 }
 
 
@@ -50,6 +53,27 @@ static void respring(CFNotificationCenterRef center, void *observer, CFStringRef
 %end
 
 
+
+%hook _UIStatusBar
+-(void)layoutSubviews {
+  %orig;
+  if(enabled_LongPress) {
+    UILongPressGestureRecognizer *longPress = [[UILongPressGestureRecognizer alloc]
+                                               initWithTarget:self
+                                               action:@selector(handleLongPress:)];
+          longPress.minimumPressDuration = 2.0;
+          [self addGestureRecognizer:longPress];
+    }
+}
+
+%new -(void)handleLongPress:(UILongPressGestureRecognizer*)recognizer{
+    if([recognizer state] == UIGestureRecognizerStateBegan) {
+      AudioServicesPlaySystemSound(1520);
+      [[FLEXManager sharedManager] showExplorer];
+    }
+}
+
+%end
 %hook _UIStatusBarForegroundView
 
 - (void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event {

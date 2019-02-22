@@ -6,3 +6,6 @@
 @end
 @interface UIStatusBar_Modern: UIView
 @end
+
+@interface _UIStatusBar: UIView
+@end
