@@ -15,6 +15,7 @@ static BOOL enabled = YES;
 static BOOL enabled_Locked = NO;
 static BOOL enabled_LongPress = YES;
 static float FLXForce = 2;
+static BOOL gestureLoaded = NO;
 
 
 @interface NSUserDefaults (Tweak_Category)
@@ -57,12 +58,13 @@ static void respring(CFNotificationCenterRef center, void *observer, CFStringRef
 %hook _UIStatusBar
 -(void)layoutSubviews {
   %orig;
-  if(enabled_LongPress) {
+  if(enabled_LongPress && !gestureLoaded) {
     UILongPressGestureRecognizer *longPress = [[UILongPressGestureRecognizer alloc]
                                                initWithTarget:self
                                                action:@selector(handleLongPress:)];
           longPress.minimumPressDuration = 2.0;
           [self addGestureRecognizer:longPress];
+          gestureLoaded = YES;
     }
 }
 
