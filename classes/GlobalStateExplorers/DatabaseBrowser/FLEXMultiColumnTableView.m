@@ -13,14 +13,14 @@
 @interface FLEXMultiColumnTableView ()
 <UITableViewDataSource, UITableViewDelegate,UIScrollViewDelegate, FLEXTableContentCellDelegate>
 
-@property (nonatomic, strong) UIScrollView *contentScrollView;
-@property (nonatomic, strong) UIScrollView *headerScrollView;
-@property (nonatomic, strong) UITableView  *leftTableView;
-@property (nonatomic, strong) UITableView  *contentTableView;
-@property (nonatomic, strong) UIView       *leftHeader;
+@property (nonatomic) UIScrollView *contentScrollView;
+@property (nonatomic) UIScrollView *headerScrollView;
+@property (nonatomic) UITableView  *leftTableView;
+@property (nonatomic) UITableView  *contentTableView;
+@property (nonatomic) UIView       *leftHeader;
 
-@property (nonatomic, strong) NSDictionary<NSString *, NSNumber *> *sortStatusDict;
-@property (nonatomic, strong) NSArray *rowData;
+@property (nonatomic) NSDictionary<NSString *, NSNumber *> *sortStatusDict;
+@property (nonatomic) NSArray *rowData;
 @end
 
 static const CGFloat kColumnMargin = 1;
@@ -51,6 +51,11 @@ static const CGFloat kColumnMargin = 1;
     CGFloat height = self.frame.size.height;
     CGFloat topheaderHeight = [self topHeaderHeight];
     CGFloat leftHeaderWidth = [self leftHeaderWidth];
+    CGFloat topInsets = 0.f;
+
+    if (@available (iOS 11.0, *)) {
+        topInsets = self.safeAreaInsets.top;
+    }
     
     CGFloat contentWidth = 0.0;
     NSInteger rowsCount = [self numberOfColumns];
@@ -58,13 +63,13 @@ static const CGFloat kColumnMargin = 1;
         contentWidth += [self contentWidthForColumn:i];
     }
     
-    self.leftTableView.frame           = CGRectMake(0, topheaderHeight, leftHeaderWidth, height - topheaderHeight);
-    self.headerScrollView.frame        = CGRectMake(leftHeaderWidth, 0, width - leftHeaderWidth, topheaderHeight);
+    self.leftTableView.frame           = CGRectMake(0, topheaderHeight + topInsets, leftHeaderWidth, height - topheaderHeight - topInsets);
+    self.headerScrollView.frame        = CGRectMake(leftHeaderWidth, topInsets, width - leftHeaderWidth, topheaderHeight);
     self.headerScrollView.contentSize  = CGSizeMake( self.contentTableView.frame.size.width, self.headerScrollView.frame.size.height);
-    self.contentTableView.frame        = CGRectMake(0, 0, contentWidth + [self numberOfColumns] * [self columnMargin] , height - topheaderHeight);
-    self.contentScrollView.frame       = CGRectMake(leftHeaderWidth, topheaderHeight, width - leftHeaderWidth, height - topheaderHeight);
+    self.contentTableView.frame        = CGRectMake(0, 0, contentWidth + [self numberOfColumns] * [self columnMargin] , height - topheaderHeight - topInsets);
+    self.contentScrollView.frame       = CGRectMake(leftHeaderWidth, topheaderHeight + topInsets, width - leftHeaderWidth, height - topheaderHeight - topInsets);
     self.contentScrollView.contentSize = self.contentTableView.frame.size;
-    self.leftHeader.frame              = CGRectMake(0, 0, [self leftHeaderWidth], [self topHeaderHeight]);
+    self.leftHeader.frame              = CGRectMake(0, topInsets, [self leftHeaderWidth], [self topHeaderHeight]);
 }
 
 
@@ -86,7 +91,7 @@ static const CGFloat kColumnMargin = 1;
 
 - (void)loadHeaderScrollView
 {
-    UIScrollView *headerScrollView = [[UIScrollView alloc] init];
+    UIScrollView *headerScrollView = [UIScrollView new];
     headerScrollView.delegate      = self;
     self.headerScrollView          = headerScrollView;
     self.headerScrollView.backgroundColor =  [UIColor colorWithWhite:0.803 alpha:0.850];
@@ -97,11 +102,11 @@ static const CGFloat kColumnMargin = 1;
 - (void)loadContentScrollView
 {
     
-    UIScrollView *scrollView = [[UIScrollView alloc] init];
+    UIScrollView *scrollView = [UIScrollView new];
     scrollView.bounces       = NO;
     scrollView.delegate      = self;
     
-    UITableView *tableView   = [[UITableView alloc] init];
+    UITableView *tableView   = [UITableView new];
     tableView.delegate       = self;
     tableView.dataSource     = self;
     tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
@@ -116,14 +121,14 @@ static const CGFloat kColumnMargin = 1;
 
 - (void)loadLeftView
 {
-    UITableView *leftTableView = [[UITableView alloc] init];
+    UITableView *leftTableView = [UITableView new];
     leftTableView.delegate       = self;
     leftTableView.dataSource     = self;
     leftTableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     self.leftTableView           = leftTableView;
     [self addSubview:leftTableView];
     
-    UIView *leftHeader = [[UIView alloc] init];
+    UIView *leftHeader = [UIView new];
     leftHeader.backgroundColor = [UIColor colorWithWhite:0.950 alpha:0.668];
     self.leftHeader            = leftHeader;
     [self addSubview:leftHeader];
@@ -199,7 +204,7 @@ static const CGFloat kColumnMargin = 1;
 - (UITableViewCell *)tableView:(UITableView *)tableView
          cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    UIColor *backgroundColor = [UIColor whiteColor];
+    UIColor *backgroundColor = UIColor.whiteColor;
     if (indexPath.row % 2 != 0) {
         backgroundColor = [UIColor colorWithWhite:0.950 alpha:0.750];
     }
@@ -214,11 +219,11 @@ static const CGFloat kColumnMargin = 1;
         for (int i = 0 ; i < cell.labels.count; i++) {
             
             UILabel *label  = cell.labels[i];
-            label.textColor = [UIColor blackColor];
+            label.textColor = UIColor.blackColor;
             
             NSString *content = [NSString stringWithFormat:@"%@",self.rowData[i]];
             if ([content isEqualToString:@"<null>"]) {
-                label.textColor = [UIColor lightGrayColor];
+                label.textColor = UIColor.lightGrayColor;
                 content = @"NULL";
             }
             label.text            = content;
@@ -282,7 +287,7 @@ static const CGFloat kColumnMargin = 1;
 #pragma mark -
 #pragma mark DataSource Accessor
 
-- (NSInteger)numberOfrows
+- (NSInteger)numberOfRows
 {
     return [self.dataSource numberOfRowsInTableView:self];
 }

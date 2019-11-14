@@ -1,6 +1,6 @@
 //
 //  FLEXTableContentHeaderCell.h
-//  UICatalog
+//  FLEX
 //
 //  Created by Peng Tao on 15/11/26.
 //  Copyright © 2015年 f. All rights reserved.
@@ -16,7 +16,7 @@ typedef NS_ENUM(NSUInteger, FLEXTableColumnHeaderSortType) {
 
 @interface FLEXTableColumnHeader : UIView
 
-@property (nonatomic, strong) UILabel *label;
+@property (nonatomic) UILabel *label;
 
 - (void)changeSortStatusWithType:(FLEXTableColumnHeaderSortType)type;
 

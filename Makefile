@@ -2,7 +2,8 @@
 
 
 #change the target, but you might lose NSLog in console
-export TARGET = iphone:10.1:10.1
+export TARGET = iphone:13.2:13.2
+export ARCHS = arm64 arm64e
 include $(THEOS)/makefiles/common.mk
 
 TWEAK_NAME = FLEX12
@@ -15,6 +16,7 @@ dtoim = $(foreach d,$(1),-I$(d))
 
 # Gather FLEX sources
 SOURCES = $(shell find $(FLEX_ROOT)/Classes -name '*.m')
+SOURCES += $(shell find $(FLEX_ROOT)/Classes -name '*.mm')
 # Gather FLEX headers for search paths
 _IMPORTS =  $(shell /bin/ls -d $(FLEX_ROOT)/Classes/*/)
 _IMPORTS += $(shell /bin/ls -d $(FLEX_ROOT)/Classes/*/*/)

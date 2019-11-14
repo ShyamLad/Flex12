@@ -9,12 +9,16 @@
 #import "FLEXMethodCallingViewController.h"
 #import "FLEXRuntimeUtility.h"
 #import "FLEXFieldEditorView.h"
+#import "FLEXObjectExplorerFactory.h"
+#import "FLEXObjectExplorerViewController.h"
 #import "FLEXArgumentInputView.h"
 #import "FLEXArgumentInputViewFactory.h"
+#import "FLEXUtility.h"
 
 @interface FLEXMethodCallingViewController ()
 
-@property (nonatomic, assign) Method method;
+@property (nonatomic) Method method;
+@property (nonatomic) FLEXTypeEncoding *returnType;
 
 @end
 
@@ -25,6 +29,7 @@
     self = [super initWithTarget:target];
     if (self) {
         self.method = method;
+        self.returnType = [FLEXRuntimeUtility returnTypeForMethod:method];
         self.title = [self isClassMethod] ? @"Class Method" : @"Method";
     }
     return self;
@@ -34,7 +39,11 @@
 {
     [super viewDidLoad];
     
-    self.fieldEditorView.fieldDescription = [FLEXRuntimeUtility prettyNameForMethod:self.method isClassMethod:[self isClassMethod]];
+    NSString *returnType = @((const char *)self.returnType);
+    NSString *methodDescription = [FLEXRuntimeUtility prettyNameForMethod:self.method isClassMethod:[self isClassMethod]];
+    NSString *format = @"Signature:\n%@\n\nReturn Type:\n%@";
+    NSString *info = [NSString stringWithFormat:format, methodDescription, returnType];
+    self.fieldEditorView.fieldDescription = info;
     
     NSArray<NSString *> *methodComponents = [FLEXRuntimeUtility prettyArgumentComponentsForMethod:self.method];
     NSMutableArray<FLEXArgumentInputView *> *argumentInputViews = [NSMutableArray array];
@@ -50,6 +59,12 @@
         argumentIndex++;
     }
     self.fieldEditorView.argumentInputViews = argumentInputViews;
+}
+
+- (void)dealloc
+{
+    free(self.returnType);
+    self.returnType = NULL;
 }
 
 - (BOOL)isClassMethod
@@ -80,10 +95,12 @@
     id returnedObject = [FLEXRuntimeUtility performSelector:method_getName(self.method) onObject:self.target withArguments:arguments error:&error];
     
     if (error) {
-        NSString *title = @"Method Call Failed";
-        NSString *message = [error localizedDescription];
-        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:title message:message delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
-        [alert show];
+        [FLEXAlert showAlert:@"Method Call Failed" message:[error localizedDescription] from:self];
+    } else if (returnedObject) {
+        // For non-nil (or void) return types, push an explorer view controller to display the returned object
+        returnedObject = [FLEXRuntimeUtility potentiallyUnwrapBoxedPointer:returnedObject type:self.returnType];
+        FLEXObjectExplorerViewController *explorerViewController = [FLEXObjectExplorerFactory explorerViewControllerForObject:returnedObject];
+        [self.navigationController pushViewController:explorerViewController animated:YES];
     } else {
         [self exploreObjectOrPopViewController:returnedObject];
     }

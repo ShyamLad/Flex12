@@ -1,6 +1,6 @@
 //
 //  FLEXTableContentCell.m
-//  UICatalog
+//  FLEX
 //
 //  Created by Peng Tao on 15/11/24.
 //  Copyright © 2015年 f. All rights reserved.
@@ -24,10 +24,10 @@
         NSMutableArray<UILabel *> *labels = [NSMutableArray array];
         for (int i = 0; i < number ; i++) {
             UILabel *label = [[UILabel alloc] initWithFrame:CGRectZero];
-            label.backgroundColor = [UIColor whiteColor];
+            label.backgroundColor = UIColor.whiteColor;
             label.font            = [UIFont systemFontOfSize:13.0];
             label.textAlignment   = NSTextAlignmentLeft;
-            label.backgroundColor = [UIColor greenColor];
+            label.backgroundColor = UIColor.greenColor;
             [labels addObject:label];
             
             UITapGestureRecognizer *gesture = [[UITapGestureRecognizer alloc] initWithTarget:cell
@@ -36,7 +36,7 @@
             label.userInteractionEnabled = YES;
             
             [cell.contentView addSubview:label];
-            cell.contentView.backgroundColor = [UIColor whiteColor];
+            cell.contentView.backgroundColor = UIColor.whiteColor;
         }
         cell.labels = labels;
     }

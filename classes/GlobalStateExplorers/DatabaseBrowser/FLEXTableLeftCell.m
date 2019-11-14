@@ -1,6 +1,6 @@
 //
 //  FLEXTableLeftCell.m
-//  UICatalog
+//  FLEX
 //
 //  Created by Peng Tao on 15/11/24.
 //  Copyright © 2015年 f. All rights reserved.
@@ -20,7 +20,7 @@
         UILabel *textLabel               = [[UILabel alloc] initWithFrame:CGRectZero];
         textLabel.textAlignment          = NSTextAlignmentCenter;
         textLabel.font                   = [UIFont systemFontOfSize:13.0];
-        textLabel.backgroundColor = [UIColor clearColor];
+        textLabel.backgroundColor = UIColor.clearColor;
         [cell.contentView addSubview:textLabel];
         cell.titlelabel = textLabel;
     }

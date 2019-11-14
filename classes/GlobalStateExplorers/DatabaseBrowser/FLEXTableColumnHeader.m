@@ -1,6 +1,6 @@
 //
 //  FLEXTableContentHeaderCell.m
-//  UICatalog
+//  FLEX
 //
 //  Created by Peng Tao on 15/11/26.
 //  Copyright © 2015年 f. All rights reserved.
@@ -18,7 +18,7 @@
 {
     self = [super initWithFrame:frame];
     if (self) {
-        self.backgroundColor = [UIColor whiteColor];
+        self.backgroundColor = UIColor.whiteColor;
         
         UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(5, 0, frame.size.width - 25, frame.size.height)];
         label.font = [UIFont systemFontOfSize:13.0];
