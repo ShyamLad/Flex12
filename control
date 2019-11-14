@@ -1,7 +1,7 @@
 Package: com.ladshyam.flex12
 Name: FLEX12
 Depends: mobilesubstrate
-Version: 1.0
+Version: 2.0
 Architecture: iphoneos-arm
 Description: Add FLEX to your SpringBoard on iOS 13!
 Maintainer: Shyam Lad
