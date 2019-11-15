@@ -1,4 +1,6 @@
 
+const NSAttributedStringKey NSForegroundColorAttributeName = NULL;
+const UIFontWeight UIFontWeightSemibold = NULL;
 
 @interface FBSystemService : NSObject
 + (id)sharedInstance;

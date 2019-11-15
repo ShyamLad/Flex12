@@ -434,7 +434,7 @@ typedef UIViewController *(^FLEXNetworkDetailRowSelectionFuture)(void);
 {
     NSMutableArray<FLEXNetworkDetailRow *> *rows = [NSMutableArray new];
     NSArray<NSString *> *sortedKeys = [dictionary.allKeys sortedArrayUsingSelector:@selector(caseInsensitiveCompare:)];
-    
+
     for (NSString *key in sortedKeys) {
         id value = dictionary[key];
         FLEXNetworkDetailRow *row = [FLEXNetworkDetailRow new];
